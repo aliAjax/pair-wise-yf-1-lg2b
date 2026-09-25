@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>离心机本地预约台</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>离心机预约台</h1>
+      <p class="sub">四台机器 · 两只转子 · 急样顶换需保证被顶预约能换机并赶上期限</p>
+    </div>
+    <div class="resource-summary" id="resourceSummary"></div>
+  </header>
+
+  <main class="layout">
+    <!-- 左栏：登记表单 + 选中预约详情 -->
+    <aside class="side">
+      <section class="card">
+        <h2 class="card-title">登记预约</h2>
+        <form id="bookingForm" autocomplete="off">
+          <label>
+            样本编号
+            <input type="text" id="f_sampleCode" required placeholder="如 S-106" />
+          </label>
+          <label>
+            登记人
+            <input type="text" id="f_owner" required placeholder="如 王敏" />
+          </label>
+          <div class="row-2">
+            <label>
+              管数
+              <input type="number" id="f_tubes" min="1" max="100" value="10" required />
+            </label>
+            <label>
+              时长(分钟)
+              <select id="f_duration">
+                <option>15</option><option>30</option><option selected>45</option>
+                <option>60</option><option>90</option><option>120</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            开始时间
+            <input type="datetime-local" id="f_start" step="900" required />
+          </label>
+          <label>
+            完成期限
+            <input type="datetime-local" id="f_deadline" step="900" required />
+          </label>
+          <div class="row-2">
+            <label>
+              优先级
+              <select id="f_priority">
+                <option value="normal">普通</option>
+                <option value="urgent">急样</option>
+              </select>
+            </label>
+            <label>
+              备注
+              <input type="text" id="f_note" placeholder="选填" />
+            </label>
+          </div>
+          <p class="hint" id="capacityHint"></p>
+          <button type="submit" class="btn btn-primary btn-block">提交预约</button>
+        </form>
+      </section>
+
+      <section class="card" id="detailCard">
+        <h2 class="card-title">预约详情</h2>
+        <div id="detailBody" class="muted">点击时间轴或列表中的预约查看</div>
+      </section>
+    </aside>
+
+    <!-- 右栏：日期导航 + 时间轴 + 当日清单 -->
+    <section class="main-col">
+      <div class="banner-slot" id="banner"></div>
+
+      <section class="card">
+        <div class="toolbar">
+          <div class="date-nav">
+            <button type="button" class="btn" id="btnPrevDay">‹ 前一天</button>
+            <input type="date" id="datePicker" />
+            <button type="button" class="btn" id="btnNextDay">后一天 ›</button>
+            <button type="button" class="btn" id="btnToday">今天</button>
+          </div>
+          <div class="legend">
+            <span class="dot dot-normal"></span>普通
+            <span class="dot dot-urgent"></span>急样
+            <span class="dot dot-moved"></span>被顶换后改排
+          </div>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">当日预约 <span class="count" id="dayCount"></span></h2>
+        <div id="dayList"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>数据仅保存在本机浏览器（localStorage），重开不丢失。</span>
+    <button type="button" class="btn btn-danger-ghost" id="btnResetDemo">重置为演示数据</button>
+  </footer>
+
+  <script src="js/archive.js"></script>
+  <script src="js/scheduler.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
